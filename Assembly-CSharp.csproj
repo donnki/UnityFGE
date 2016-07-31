@@ -50,8 +50,6 @@
      <Compile Include="Assets\FGE\PoolManager\SpawnPool.cs" />
      <Compile Include="Assets\FGE\core\DBManager.cs" />
      <Compile Include="Assets\FGE\core\EventManager.cs" />
-     <Compile Include="Assets\testscripts\DbAccess.cs" />
-     <Compile Include="Assets\testscripts\Test.cs" />
      <Compile Include="Assets\testscripts\TestDBManager.cs" />
      <Compile Include="Assets\testscripts\TestEventManager.cs" />
      <Compile Include="Assets\testscripts\TestEventObject.cs" />

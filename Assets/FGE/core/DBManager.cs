@@ -24,8 +24,8 @@ public class DBManager
 
 
 	private SqliteConnection db;
-	private new Dictionary<string, Dictionary<object, Dictionary<string, object>>> cache;
-	public void initDBConnection(string connectionString){
+	private Dictionary<string, Dictionary<object, Dictionary<string, object>>> cache;
+	public void initConnection(string connectionString){
 		cache = new Dictionary<string, Dictionary<object, Dictionary<string, object>>>();
 		try
 		{
@@ -41,8 +41,19 @@ public class DBManager
 		}
 	}
 
+	public void closeConnection ()
 
-	public void loadTable(string tableName){
+	{
+		if (db != null) {
+			db.Close ();
+		}
+		db = null;
+		Debug.Log ("Disconnected from db.");
+
+	}
+
+	///加载整张表至缓存中并返回表数据
+	public Dictionary<object, Dictionary<string, object>> loadTable(string tableName){
 		if(cache.ContainsKey(tableName)){
 			cache.Remove(tableName);
 		}
@@ -52,25 +63,60 @@ public class DBManager
 		dbCommand.CommandText = "select * from " + tableName;
 
 		SqliteDataReader reader = dbCommand.ExecuteReader ();
-//		Debug.Log("reader.FieldCount:"+ reader.FieldCount
-//			+", reader.VisibleFieldCount:" + reader.VisibleFieldCount
-//			+", reader.Depth:" + reader.Depth);
+		//		Debug.Log("reader.FieldCount:"+ reader.FieldCount
+		//			+", reader.VisibleFieldCount:" + reader.VisibleFieldCount
+		//			+", reader.Depth:" + reader.Depth);
 		
 		while (reader.Read())  
 		{ 	
-//			string s = "";
+			//			string s = "";
 			Dictionary<string, object> rowData = new Dictionary<string, object>();
 			for(int i=0; i< reader.FieldCount; i++){
-//				s = s + (reader.GetName(i) + ": " + reader[i] + ", ");
+				//				s = s + (reader.GetName(i) + ": " + reader[i] + ", ");
 				rowData.Add(reader.GetName(i), reader[i]);
 			}
-//			Debug.Log(s);
+			//			Debug.Log(s);
 			tableData.Add(reader[0], rowData);
 		} 
 		cache.Add(tableName, tableData);
 		reader.Close();
+		return tableData;
 	}
 
+	private Dictionary<string, object> readRowFrom(SqliteDataReader reader){
+		Dictionary<string, object> rowData = new Dictionary<string, object>();
+		for(int i=0; i< reader.FieldCount; i++){
+			rowData.Add(reader.GetName(i), reader[i]);
+		}
+		return rowData;
+	}
+
+	//根据ID从数据库指定表中查询
+	public Dictionary<string, object> findByID(string tableName, object id){
+		if(cache.ContainsKey(tableName) && cache[tableName].ContainsKey(id)){
+			return cache[tableName][id];
+		}else{
+			Debug.Log("~~~dosearch");	
+			SqliteCommand dbCommand = db.CreateCommand ();
+			dbCommand.CommandText = "select * from " + tableName + " where id='" + id + "'";
+			SqliteDataReader reader = dbCommand.ExecuteReader ();
+			Dictionary<string, object> rowData = null;
+			if(reader.HasRows){
+				while (reader.Read()){
+					rowData = readRowFrom(reader);
+				}
+				if(!cache.ContainsKey(tableName)){
+					cache[tableName] = new Dictionary<object, Dictionary<string, object>>();
+				}
+				cache[tableName].Add(id, rowData);
+			}else{
+				Debug.Log("ID:"+id+"在数据库表"+tableName+"中不存在！");
+			}
+			return rowData;
+		}
+	}
+
+	//打印缓存数据
 	public void dumpCache(){
 		
 		foreach(var table in cache){
