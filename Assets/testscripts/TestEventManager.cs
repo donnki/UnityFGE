@@ -1,38 +1,25 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 
-public class TestEventObject {
-	private string name;
-	public TestEventObject(string name){
-		this.name = name;
-	}
-
-	void onFireEvent(object data){
-		Debug.Log(name + " onFireEvent~~~~~" + data);
-	}
-
-	public void addEvent(){
-		EventManager.sharedInstance().on("testEvent", onFireEvent); 
-	}
-
-	public void removeEvent(){
-		EventManager.sharedInstance().clear("testEvent", onFireEvent); 
-	}
-}
-
-
-public class TestEventManager : MonoBehaviour {
+public class TestEventManager : SceneControl {
 	public GameObject cube;
 	// Use this for initialization
 	private TestEventObject obj1, obj2;
 	void Start () {
-		obj1 = new TestEventObject("object 1");
+		obj1 = new TestEventObject("object 1"); 
 		obj2 = new TestEventObject("object 2"); 
+
+
 	}
-	
+
+	void OnDestroy(){
+		obj1.removeEvent();
+		obj2.removeEvent();
+	}
 	void Update () {
-	 
+		
 	}
 
 	void doTest(){
@@ -63,5 +50,28 @@ public class TestEventManager : MonoBehaviour {
 		}
 
 	} 
+
+
 		
+}
+
+
+public class TestEventObject {
+	private string name;
+	public TestEventObject(string name){
+		this.name = name;
+	}
+
+	void onFireEvent(object data){
+		Debug.Log(name + " onFireEvent~~~~~" + data);
+		EventManager.sharedInstance().fire("LOGEVENT", name + " onFireEvent~~~~~" + data);
+	}
+
+	public void addEvent(){
+		EventManager.sharedInstance().on("testEvent", onFireEvent); 
+	}
+
+	public void removeEvent(){
+		EventManager.sharedInstance().clear("testEvent", onFireEvent); 
+	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using Mono.Data.Sqlite;
 using UnityEngine;
@@ -25,11 +26,37 @@ public class DBManager
 
 	private SqliteConnection db;
 	private Dictionary<string, Dictionary<object, Dictionary<string, object>>> cache;
-	public void initConnection(string connectionString){
+	public void initConnection(string path, string filename){
 		cache = new Dictionary<string, Dictionary<object, Dictionary<string, object>>>();
 		try
 		{
+			string connectionString = "URI=file:" + path + "/" + filename;
+			if(Application.platform == RuntimePlatform.Android){
+				 
+				string copyFile = Application.persistentDataPath + "/" + filename;
+				//如果已知路径没有地方放数据库，那么我们从Unity中拷贝  
+				if(!File.Exists(copyFile))  
+				{  
+					//用www先从Unity中下载到数据库  
+					WWW loadDB = new WWW("jar:file://" + Application.dataPath + "!/assets/" + filename);   
+					bool boo=true;  
+					while(boo)  
+					{  
+						if(loadDB.isDone)  
+						{  
+							//拷贝至规定的地方  
+							File.WriteAllBytes(copyFile, loadDB.bytes);  
+							boo =false;  
+						}  
+					}  
+
+				}  
+				connectionString = "URI=file:" + copyFile; 
+			}
+
+			Debug.Log(connectionString + "\n" + Application.persistentDataPath);
 			db = new SqliteConnection (connectionString);
+
 			db.Open ();
 			Debug.Log ("Connected to db");
 
@@ -117,8 +144,8 @@ public class DBManager
 	}
 
 	//打印缓存数据
-	public void dumpCache(){
-		
+	public string dumpCache(){
+		string resp = "";
 		foreach(var table in cache){
 			string s = "表名: " + table.Key + ",共" + table.Value.Count + "条数据: \n";
 			foreach(var row in table.Value){
@@ -129,7 +156,9 @@ public class DBManager
 				s = s + "}, \n";
 			}
 			Debug.Log(s);
+			resp = s + "\n";
 		}
+		return resp;
 	}
 
 }

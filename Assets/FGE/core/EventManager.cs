@@ -44,7 +44,7 @@ public class EventManager {
 				return;
 			}
 		}
-		Debug.LogWarning("触发失败, 事件"+eventName+"未注册！忽略");
+		Debug.Log("触发失败, 事件"+eventName+"未注册！忽略");
 
 
 	}
@@ -58,13 +58,13 @@ public class EventManager {
 			if(m_dicEvents.ContainsKey(eventName)){
 				m_dicEvents.Remove(eventName);
 			}else{
-				Debug.LogWarning("清除失败, 事件"+eventName+"未注册！忽略");
+				Debug.Log("清除失败, 事件"+eventName+"未注册！忽略");
 			}
 		}else{
 			if(m_dicEvents.ContainsKey(eventName)){
 				m_dicEvents[eventName] -= handler;	
 			}else{
-				Debug.LogWarning("清除失败, 事件"+eventName+"未注册！忽略");
+				Debug.Log("清除失败, 事件"+eventName+"未注册！忽略");
 			}
 		}
 	}

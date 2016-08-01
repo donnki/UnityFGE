@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TestPoolManager : MonoBehaviour {
+
+public class TestPoolManager : SceneControl {
 	public Transform cubePrefab;
 
-	SpawnPool cubePool;
+	public SpawnPool cubePool;
 
 	///
 	//可以直接在编辑器里操作SpawnPool，为一个对象绑上SpawnPool，直接在编辑器里设置好相
 	//关的属性，就可以直接调用pool.Spawn("Cube Prefab")来生成对象了。
 	//也可以通过纯代码来使用PoolManager， 以下通过程序代码操作：
 	void Start () {
+		/*
 		//创建一个名为Cube的对象缓冲区
 		cubePool = PoolManager.Pools.Create("Cube");
 
@@ -48,6 +50,7 @@ public class TestPoolManager : MonoBehaviour {
 		prefabPool.limitFIFO = true;
 		//加入此预设
 		cubePool.CreatePrefabPool(prefabPool);
+		*/
 
 	}
 	
@@ -62,6 +65,7 @@ public class TestPoolManager : MonoBehaviour {
 			Transform ins = cubePool.Spawn("Cube Prefab");
 			ins.localPosition = new Vector3((10 - count) * 2, 0, 0);
 			count = count + 1;
+			EventManager.sharedInstance().fire("LOGEVENT", "add cube from cubePool.Spawn");
 		}
 			
 	}
