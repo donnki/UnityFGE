@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 
 public class SBMessage
 {
@@ -40,6 +41,55 @@ public class SBMessage
 		buf.WriteBytes(buffer.ReadRemain());
 		buf.ResetReaderIndex();
 		return buf.ReadRemain();
+	}
+
+	/// <summary>
+	/// TripleDES Encrypts the message.
+	/// </summary>
+	/// <returns>加密后的message.</returns>
+	/// <param name="msg">加密前的SBMessage</param>
+	/// <param name="key">24字节的key字符串</param>
+	public static SBMessage encryptMessage(SBMessage msg, string key){
+		byte[] plaintextBuffer =  msg.Buffer.ToArray();
+
+		TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider
+		{
+			Key = System.Text.Encoding.Default.GetBytes(key),
+			Mode = CipherMode.ECB,
+			Padding = PaddingMode.PKCS7
+		};
+		ICryptoTransform cTransform = tdes.CreateEncryptor();
+		byte[] resultArray = cTransform.TransformFinalBlock(plaintextBuffer, 0, plaintextBuffer.Length);
+		tdes.Clear();
+
+		SBMessage _msg = new SBMessage(msg.packetId);
+		_msg.WriteBytes(resultArray);
+		return _msg;
+	}
+
+	/// <summary>
+	/// TripleDES Decrypts the message.
+	/// </summary>
+	/// <returns>解密后的message</returns>
+	/// <param name="msg">解密前的SBMessage</param>
+	/// <param name="key">24字节的key字符串</param>
+	public static SBMessage decryptMessage(SBMessage msg, string key){
+		byte[] plaintextBuffer =  msg.Buffer.ToArray();
+
+		TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider
+		{
+			Key = System.Text.Encoding.Default.GetBytes(key),
+			Mode = CipherMode.ECB,
+			Padding = PaddingMode.PKCS7
+		};
+
+		ICryptoTransform cTransform = tdes.CreateDecryptor();
+		byte[] resultArray = cTransform.TransformFinalBlock(plaintextBuffer, 0, plaintextBuffer.Length);
+		tdes.Clear();
+
+		SBMessage _msg = new SBMessage(msg.packetId);
+		_msg.WriteBytes(resultArray);
+		return _msg;
 	}
 
 	public SBMessage WriteBytes(byte[] bytes){

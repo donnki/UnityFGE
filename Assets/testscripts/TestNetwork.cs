@@ -77,6 +77,24 @@ public class TestNetwork : SceneControl {
 			+ "sheild:" + player.sheild + ",\n");
 	}
 
+	void testTripleDesEncode(){
+		SBMessage msg = new SBMessage(1024);
+
+		msg.Buffer.WriteInt(10000);
+		msg.Buffer.WriteStringUshort("hello测试！！");
+		msg.Buffer.WriteByte(10);
+		msg.Buffer.WriteShort(1000);
+		msg.Buffer.WriteStringUshort("测试中文abc中文！！");
+
+		Debug.Log("Before encode: " + BitConverter.ToString(msg.Buffer.ToArray()));
+
+		msg = SBMessage.encryptMessage(msg, "123456123456123456123456");
+		Debug.Log("After encode: " + BitConverter.ToString(msg.Buffer.ToArray()));
+
+		msg = SBMessage.decryptMessage(msg, "123456123456123456123456");
+		Debug.Log("After decode: " + BitConverter.ToString(msg.Buffer.ToArray()));
+	}
+
 	void testProtobufEncode(){
 		Player proto = new Player();
 		proto.id = 12345;
@@ -133,10 +151,13 @@ public class TestNetwork : SceneControl {
 		if(GUI.Button(new Rect(100,200,200,50), "测试SBMessage编码")){
 			testSBMessage();
 		}
-		if(GUI.Button(new Rect(100,300,200,50), "测试Protobuf编码")){
+		if(GUI.Button(new Rect(100,300,200,50), "测试TripleDES加密")){
+			 testTripleDesEncode();
+		}
+		if(GUI.Button(new Rect(100,400,200,50), "测试Protobuf编码")){
 			testProtobufEncode();
 		}
-		if(GUI.Button(new Rect(100,400,200,50), "测试Protobuf解码")){
+		if(GUI.Button(new Rect(100,500,200,50), "测试Protobuf解码")){
 			testProtobufDecode();
 		}
 	}
