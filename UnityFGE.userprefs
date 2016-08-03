@@ -1,15 +1,15 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/testscripts/SwitchScene.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/FGE/core/DBManager.cs">
     <Files>
-      <File FileName="Assets/FGE/core/DBManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/FGE/core/DBManager.cs" Line="54" Column="9" />
       <File FileName="Assets/FGE/core/EventManager.cs" Line="1" Column="1" />
       <File FileName="Assets/testscripts/TestDBManager.cs" Line="1" Column="1" />
       <File FileName="Assets/testscripts/TestEventManager.cs" Line="1" Column="1" />
       <File FileName="Assets/testscripts/TestPoolManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/FGE/core/GameEngine.cs" Line="33" Column="26" />
+      <File FileName="Assets/FGE/core/GameEngine.cs" Line="1" Column="1" />
       <File FileName="Assets/FGE/core/SceneControl.cs" Line="1" Column="1" />
-      <File FileName="Assets/testscripts/SwitchScene.cs" Line="7" Column="3" />
+      <File FileName="Assets/testscripts/SwitchScene.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

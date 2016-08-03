@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using Mono.Data.Sqlite;
 using UnityEngine;
 
+/// <summary>
+/// DBManager本地只读数据库的操作。用于读入各种游戏数据。
+/// </summary>
 public class DBManager
 {
 	private volatile static DBManager _instance = null;

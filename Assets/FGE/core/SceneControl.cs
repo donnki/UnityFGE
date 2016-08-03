@@ -2,6 +2,9 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+/// <summary>
+/// 场景控制的基类，所有的场景入口应该由此类派生出去。
+/// </summary>
 public class SceneControl : MonoBehaviour {
 	private bool isLoadingNextScene;
 	private AsyncOperation loadingOperation;

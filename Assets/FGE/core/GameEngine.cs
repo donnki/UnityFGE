@@ -2,7 +2,10 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-
+/// <summary>
+/// 游戏控制根结点Manager of Managers中的第一个Manager
+/// 可以通过GameEngine访问到任意一个子Manager
+/// </summary>
 public class GameEngine {
 	private volatile static GameEngine  _instance = null;
 	private static readonly object lockHelper = new object();
@@ -31,6 +34,13 @@ public class GameEngine {
 	public SceneControl Scene{
 		get { return _scene; }
 		set { _scene = value; }
+	}
+
+	public DBManager DB{
+		get { return DBManager.sharedInstance(); }
+	}
+	public EventManager Events{
+		get { return EventManager.sharedInstance(); }
 	}
 
 	public void changeScene(string sceneName){

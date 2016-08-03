@@ -48,6 +48,7 @@
      <Compile Include="Assets\FGE\PoolManager\Editor\PathologicalGames\Common\PGEditorUtils.cs" />
      <Compile Include="Assets\FGE\PoolManager\Editor\PathologicalGames\PoolManager\PreRuntimePoolItemInspector.cs" />
      <Compile Include="Assets\FGE\PoolManager\Editor\PathologicalGames\PoolManager\SpawnPoolInspector.cs" />
+     <None Include="Assets\FGE\protobuf-net\Web\TODO.txt" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>

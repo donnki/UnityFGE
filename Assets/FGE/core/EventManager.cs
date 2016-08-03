@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
+/// <summary>
+/// 事件系统，任意位置调用其单例的“on/fire/clear”方法进行事件“监听/触发/清除”进行事件处理
+/// </summary>
 public class EventManager {
 	private volatile static EventManager _instance = null;
 	private static readonly object lockHelper = new object();

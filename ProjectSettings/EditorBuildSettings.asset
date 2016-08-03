@@ -11,3 +11,5 @@ EditorBuildSettings:
     path: Assets/TestDbManagerScene.unity
   - enabled: 1
     path: Assets/TestPoolManagerScene.unity
+  - enabled: 1
+    path: Assets/TestNetworkScene.unity
