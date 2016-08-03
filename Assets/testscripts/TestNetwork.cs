@@ -49,10 +49,32 @@ public class TestNetwork : SceneControl {
 		msg.Buffer.WriteShort(1000);
 		msg.Buffer.WriteStringUshort("测试中文abc中文！！");
 
+		Player proto = new Player();
+		proto.id = 12345;
+		proto.exp = 10;
+		proto.name = "1玩家12345";
+		proto.level = 1;
+		proto.cups = 20;
+		proto.sheild = 120;
+
+		msg.WriteProto<Player>(proto);
 		Debug.Log(msg.Buffer);
   		
 		SBMessage _msg = SBMessage.parseFrom(msg.ToNetworkBytes());
 		Debug.Log(_msg.Buffer);
+		_msg.Buffer.ReadInt();
+		_msg.Buffer.ReadStringUShort();
+		_msg.Buffer.ReadByte();
+		_msg.Buffer.ReadShort();
+		_msg.Buffer.ReadStringUShort();
+		Player player = _msg.ReadProto<Player>();
+		EventManager.sharedInstance().fire("LOGEVENT", 
+			"***Player信息***\nid:" + player.id + ",\n"
+			+ "name:" + player.name + ",\n"
+			+ "exp:" + player.exp + ",\n"
+			+ "level:" + player.level + ",\n"
+			+ "cups:" + player.cups + ",\n"
+			+ "sheild:" + player.sheild + ",\n");
 	}
 
 	void testProtobufEncode(){

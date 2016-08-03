@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.IO;
 
 public class SBMessage
 {
@@ -50,6 +50,36 @@ public class SBMessage
 	public byte[] ReadBytes(byte[] bytes){
 		buffer.ReadBytes(bytes, 0, bytes.Length);
 		return bytes;
+	}
+
+	public SBMessage WriteProto<T>(T proto){
+		using (MemoryStream ms = new MemoryStream())
+		{   
+			ProtoBuf.Serializer.Serialize<T>(ms, proto);
+			byte[] result = new byte[ms.Length];
+			//将流的位置设为0，起始点
+			ms.Position = 0;
+			//将流中的内容读取到二进制数组中
+			ms.Read (result, 0, result.Length);
+			buffer.WriteShort((short)result.Length); 		//先写入proto的长度short
+			buffer.WriteBytes(result);				//再写入proto的字节码
+		}
+		return this;
+	}
+
+	public T ReadProto<T>(){
+		short len = buffer.ReadShort();
+		byte[] result = new byte[len];
+		buffer.ReadBytes(result, 0, len);
+		using (MemoryStream ms = new MemoryStream()) {
+			//将消息写入流中
+			ms.Write (result, 0, result.Length);
+			//将流的位置归0
+			ms.Position = 0;
+			//使用工具反序列化对象
+			T obj = ProtoBuf.Serializer.Deserialize<T> (ms);
+			return obj;
+		}
 	}
 
 	public override string ToString(){
