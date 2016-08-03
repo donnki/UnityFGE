@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using player;
 using System.IO;
+using System;
 
 public class TestNetwork : SceneControl {
 
@@ -31,8 +33,26 @@ public class TestNetwork : SceneControl {
 		Debug.Log(buf.ReadByte());
 		Debug.Log(buf.ReadShort());
 		Debug.Log(buf.ReadStringUShort());
-		Debug.Log(buf.ReadStringUShort());
 
+		ushort len = buf.ReadUshort();
+		byte[] bytes = buf.ReadRemain();
+		Debug.Log(len + "------" + System.Text.Encoding.UTF8.GetString(bytes));
+
+	}
+
+	void testSBMessage(){
+		SBMessage msg = new SBMessage(1024);
+
+		msg.Buffer.WriteInt(10000);
+		msg.Buffer.WriteStringUshort("hello测试！！");
+		msg.Buffer.WriteByte(10);
+		msg.Buffer.WriteShort(1000);
+		msg.Buffer.WriteStringUshort("测试中文abc中文！！");
+
+		Debug.Log(msg.Buffer);
+  		
+		SBMessage _msg = SBMessage.parseFrom(msg.ToNetworkBytes());
+		Debug.Log(_msg.Buffer);
 	}
 
 	void testProtobufEncode(){
@@ -88,10 +108,13 @@ public class TestNetwork : SceneControl {
 		if(GUI.Button(new Rect(100,100,200,50), "测试ByteBuff")){
 			testByteBuff();
 		}
-		if(GUI.Button(new Rect(100,200,200,50), "测试Protobuf编码")){
+		if(GUI.Button(new Rect(100,200,200,50), "测试SBMessage编码")){
+			testSBMessage();
+		}
+		if(GUI.Button(new Rect(100,300,200,50), "测试Protobuf编码")){
 			testProtobufEncode();
 		}
-		if(GUI.Button(new Rect(100,300,200,50), "测试Protobuf解码")){
+		if(GUI.Button(new Rect(100,400,200,50), "测试Protobuf解码")){
 			testProtobufDecode();
 		}
 	}

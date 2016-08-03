@@ -360,6 +360,15 @@ public class ByteBuffer
 	}
 
 	/**
+	 * 读取剩余的全部字节并返回
+	 */
+	public byte[] ReadRemain(){
+		byte[] bytes = new byte[ReadableBytes()];
+		ReadBytes(bytes, 0, bytes.Length);
+		return bytes;
+	}
+
+	/**
      * 从读取索引位置开始读取len长度的字节到disbytes目标字节数组中
      * @params disstart 目标字节数组的写入索引
      */
@@ -473,5 +482,10 @@ public class ByteBuffer
 	public int GetCapacity()
 	{
 		return this.capacity;
+	}
+
+	public override string ToString ()
+	{
+		return BitConverter.ToString(this.ToArray());
 	}
 }
