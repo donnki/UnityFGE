@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using battle;
+using player;
 using System.IO;
 
 public class TestNetwork : SceneControl {
@@ -36,16 +36,21 @@ public class TestNetwork : SceneControl {
 	}
 
 	void testProtobufEncode(){
-		Battle b = new Battle();
-		b.id = 11231234L;
-		b.destory = 2;
-		b.star = 3;
-		b.attacker = 1231214L;
-		b.defender = 12312315L;
+		Player proto = new Player();
+		proto.id = 12345;
+		proto.name = "1玩家12345";
+		proto.level = 1;
+		proto.cups = 0;
+		proto.sheild = 0;
+		var t = new Player.PveState();
+		t.id = 123;
+		t.best = 1;
+		t.star = 2;
+		proto.pveState.Add(t);
 
 		using (MemoryStream ms = new MemoryStream())
 		{   
-			ProtoBuf.Serializer.Serialize<Battle>(ms, b);
+			ProtoBuf.Serializer.Serialize<Player>(ms, proto);
 			byte[] result = new byte[ms.Length];
 			//将流的位置设为0，起始点
 			ms.Position = 0;
@@ -66,12 +71,15 @@ public class TestNetwork : SceneControl {
 			//将流的位置归0
 			ms.Position = 0;
 			//使用工具反序列化对象
-			Battle battle = ProtoBuf.Serializer.Deserialize<Battle> (ms);
-			Debug.Log("~~~~id:" + battle.id + ","
-				+ "destory:" + battle.destory + ","
-				+ "star:" + battle.star + ","
-				+ "attacker:" + battle.attacker + ","
-				+ "defender:" + battle.defender + ",");
+			Player player = ProtoBuf.Serializer.Deserialize<Player> (ms);
+			EventManager.sharedInstance().fire("LOGEVENT", 
+				"***Player信息***\nid:" + player.id + ",\n"
+				+ "name:" + player.name + ",\n"
+				+ "level:" + player.level + ",\n"
+				+ "cups:" + player.cups + ",\n"
+				+ "sheild:" + player.sheild + ",\n"
+				+ "pve state id:" + player.pveState[0].id + ",\n"
+				+ "pve state best:" + player.pveState[0].best);
 		}
 	}
 

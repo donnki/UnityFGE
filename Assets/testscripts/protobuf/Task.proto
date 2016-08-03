@@ -1,0 +1,26 @@
+option java_package = "com.loy.mobile.server.projectslg.model.proto"; 
+option java_outer_classname = "TaskProto"; 
+message Task {
+	message SubTask{
+		required int32 id = 1;   			//任务id
+		required int32 status = 2; 			//任务状态  1.已接取还没完成  2.已完成还没领取奖励, 3. 已经完成并且已经领取了任务
+		required int32 progress = 3; 		//进度
+		required int32 lastReward = 4;		//上次奖励是否领取 1代表上次没有领取(每日和每周任务才用)
+	}
+	repeated SubTask mainTask = 1;			//主线任务
+	repeated SubTask branchTask = 2;		//支线任务
+	repeated SubTask dayTask = 3;			//每日任务
+	repeated SubTask weekTask = 4;			//每周任务
+	message TermRecord{
+		message MapState {					
+	  		required int32 key = 1; 		//key
+	  		required int32 count = 2;		//数量
+	  	}
+		required int32 type = 1;   			//条件类型
+		required int32 currCount = 2; 		//单纯记录次数用这个变量
+		repeated MapState currMap = 3; 		//需要记录具体id和次数用这个变量 如 建筑唯一Id：等级 idName:lv
+	}
+	repeated TermRecord mainTermMap = 5;			//主线记录
+	repeated TermRecord dayTermMap = 6;				//每日记录
+	repeated TermRecord weekTermMap = 7;			//每周记录
+}

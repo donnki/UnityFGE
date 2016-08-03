@@ -1,0 +1,78 @@
+option java_package = "com.loy.mobile.server.projectslg.model.proto"; 
+option java_outer_classname = "PlayerProto"; 
+message Player {
+  required int64 id = 1;
+  required string name = 2;
+  required int32 level = 3;     			//等级
+  required int32 exp = 4;       			//经验值
+  required int32 cups = 5;      			//杯数
+  required int32 sheild = 6;      			//护盾时间
+
+  message AchievementState {           		//成就状态定义
+    required int32 id = 1;							//成就ID
+    optional int32 percent = 2 [default = 0];		//成就完成百分比
+  }
+  repeated AchievementState achi = 7;    	//已完成的成就状态列表
+
+  message PveState {						//PVE关卡状态定义
+  	required int32 id = 1;							//关卡ID
+  	optional int32 best = 2 [default = 0];			//关卡最好成绩百分比
+  	optional int32 star = 3 [default = 0];			//关卡已获星级
+    optional int32 curCount = 4 [default = 0];  //关卡今天已挑战的次数
+  }
+  repeated PveState pveState = 8;			//PVE关卡的挑战状态列表
+
+  message OwnedHeroState {					//拥有的英雄状态定义
+  	required int32 id = 1;							        //英雄ID
+  	optional int32 level = 2 [default = 0];			//英雄等级
+  	optional int32 star = 3 [default = 0]; 			//英雄的星级
+    optional int32 stage = 4;                  //英雄阶段
+    optional int32 skillLevel1 = 5 [default = 1]; //英雄技能1
+    optional int32 skillLevel2 = 6 [default = 1]; //英雄技能2
+    optional int32 skillLevel3 = 7 [default = 1]; //英雄技能3
+    optional int32 cskillLevel1 = 8 [default = 1]; //英雄指挥官技能1
+    optional int32 cskillLevel2 = 9 [default = 1]; //英雄指挥官技能2
+    optional int32 cskillLevel3 = 10 [default = 1]; //英雄指挥官技能3
+    optional int32 exp = 11 [default = 0];      //英雄当前经验值
+    optional int32 equip1 = 12; //英雄1格装备
+    optional int32 equip2 = 13; //英雄2格装备
+    optional int32 equip3 = 14; //英雄3格装备
+    optional int32 equip4 = 15; //英雄4格装备
+
+  }
+  repeated OwnedHeroState ownedHeros = 9;	//拥有的英雄列表
+
+  message MineState {						//拥有的资源&物品定义
+  	required int32 type = 1; 						//资源&物品类型
+  	required int32 count = 2;						//资源&物品数目
+  }
+  repeated MineState mines = 10; 					//拥有的资源&物品列表
+
+  message GroupDefinition{
+    required int64 id = 1;            //公会ID
+    required int32 icon = 2;          //公会显示小图标
+    required string name = 3;         //公会名称
+  }
+  optional GroupDefinition groupInfo = 11;    //玩家公会信息
+
+  optional int64 lastVersion = 12;      //玩家信息版本号
+  optional int64 lastLowLotteryTime = 13;   //最近一次使用低频搜索时间
+
+  optional int64 lastMidLotteryTime = 14;   //最近一次使用中频搜索时间
+  
+  message PveCharpter {                   //PVE章节获得宝箱奖励
+    required int32 charpter = 1;                //章节
+    repeated int32 getlevel = 2;      //已经获得的宝箱
+  }
+  repeated PveCharpter pveCharpter = 15;     //PVE章节获得宝箱奖励列表
+
+  optional int32 scene = 16 [default = 0];      //第几个剧情
+  optional int32 charpter = 17 [default = 0];   //剧情中第几节
+
+  message Activity {                   //活动参加次数
+    required int32 id = 1;                //活动id
+    required int32 activityCount = 2;      //今天参加次数
+  }
+  repeated Activity activity = 18;     //活动参加次数列表
+}
+
